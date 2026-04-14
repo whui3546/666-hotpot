@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Image AI Watermark Checker</title>
+<style>
+body { background: #111; color: #fff; font-family: sans-serif; padding: 20px; }
+h1 { color: #FF2D78; }
+h2 { color: #FFD700; margin-top: 30px; }
+.img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.img-card { background: #222; border-radius: 12px; padding: 10px; }
+.img-card img { width: 100%; border-radius: 8px; cursor: zoom-in; }
+.img-card img.zoomed { position: fixed; top: 0; left: 0; width: auto; height: 100vh; z-index: 999; cursor: zoom-out; }
+.img-name { color: #aaa; font-size: 11px; margin-top: 6px; word-break: break-all; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; margin-left: 4px; }
+.badge-gemini { background: #4285f4; }
+.badge-generated { background: #ff6b6b; }
+.badge-wechat { background: #07c160; }
+</style>
+</head>
+<body>
+<h1>🔍 AI Watermark Checker - 666 Hot Pot Spicy Slices</h1>
+<p>Click any image to zoom in and check the bottom-right corner for AI logos</p>
+<div id="app"></div>
+<script>
+const folders = {
+  '666产品图': [
+    '10.jpg','11.jpg','12 (2).jpg','5.jpg','6.jpg','7.jpg',
+    'export_1.jpg',
+    'Gemini_Generated_Image_2kzv2r2kzv2r2kzv.png',
+    'Gemini_Generated_Image_mljh7kmljh7kmljh.png',
+    'Gemini_Generated_Image_mrsxzzmrsxzzmrsx (1).png',
+    'Gemini_Generated_Image_x1x6chx1x6chx1x6.png',
+  ],
+  '666产品宣传图': [
+    '1 (2).png','1.png','10.jpg','11.png','12.jpg',
+    '2 (2).png','2.png','4.jpg','4.png','5 (2).png','5.jpg','5.png',
+    '6.jpg',
+    'Gemini_Generated_Image_2qa1302qa1302qa1.png',
+    'Gemini_Generated_Image_qvgn5oqvgn5oqvgn.png',
+    '7.png','8.png','9.png',
+    'fded4e6d67d48af3409b7b27948eac29.jpg',
+  ],
+  '666用户分享照_Gemini': [
+    'Gemini_Generated_Image_7uj0yv7uj0yv7uj0.png',
+    'Gemini_Generated_Image_nf0baznf0baznf0b.png',
+  ],
+  '666用户分享照_生成类': [
+    '图片优化 (1)(1).png','图片优化 (2)(1).png','图片优化 (4)(1).png','图片优化(1).png',
+    '图片添加与融合.png','图片添加与融合_(1) (1).png','图片添加与融合_(1).png','图片添加与融合_(9).png',
+    '图片生成与融合.png','图片生成与融合_(2).png','图片生成与融合_(4).png',
+    '生成产品渲染图.png','生成产品渲染图_(1) (1).png','生成产品渲染图_(1).png',
+    '生成产品渲染图_(3) (1).png','生成产品渲染图_(3).png','生成产品渲染图_(4) (1).png',
+    '生成产品渲染图_(5) (1).png','生成产品渲染图_(5).png','生成产品渲染图_(6).png','生成产品渲染图_(7).png',
+  ],
+  '666素材_Gemini': [
+    'Gemini_Generated_Image_2kzv2r2kzv2r2kzv(1).png',
+    'Gemini_Generated_Image_3nvb4r3nvb4r3nvb.png',
+    'Gemini_Generated_Image_958q2q958q2q958q(1).png',
+    'Gemini_Generated_Image_aq1cg9aq1cg9aq1c.png',
+    'Gemini_Generated_Image_aue5uiaue5uiaue5.png',
+    'Gemini_Generated_Image_ijera8ijera8ijer.png',
+    'Gemini_Generated_Image_ocxg04ocxg04ocxg.png',
+    'Gemini_Generated_Image_rpousdrpousdrpou.png',
+    'Gemini_Generated_Image_tf05a3tf05a3tf05.png',
+  ],
+};
+
+const baseUrl = 'http://127.0.0.1:28800/json';
+
+// We'll use file:// protocol - need to set up a simple file server
+const app = document.getElementById('app');
+
+for (const [folder, files] of Object.entries(folders)) {
+  const section = document.createElement('div');
+  section.innerHTML = `<h2>${folder} (${files.length} images)</h2>`;
+  const grid = document.createElement('div');
+  grid.className = 'img-grid';
+  
+  for (const file of files) {
+    const card = document.createElement('div');
+    card.className = 'img-card';
+    const badge = file.includes('Gemini') ? '<span class="badge badge-gemini">Gemini</span>' :
+                  file.includes('生成') || file.includes('优化') ? '<span class="badge badge-generated">AI Generated</span>' : '';
+    card.innerHTML = `
+      <img src="" data-folder="${folder}" data-file="${file}" loading="lazy" onclick="this.classList.toggle('zoomed')">
+      <div class="img-name">${file} ${badge}</div>
+    `;
+    grid.appendChild(card);
+  }
+  section.appendChild(grid);
+  app.appendChild(section);
+}
+</script>
+</body>
+</html>
